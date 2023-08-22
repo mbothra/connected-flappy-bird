@@ -5,16 +5,14 @@
 
 {#if zone.show}
 	<section style="left: {zone.left}px; top: {zone.top}px; width: {zone.width}px; height: 350px;" class="api-call-zone">
-		<div class="effect-tag">{zone.effect}</div>
 		<div class="effect-description">Functions Activation Zone</div>
-		<!-- You can add themed graphics and animations based on zone.effect here -->
 	</section>
 {/if}
 
 <style>
 	.api-call-zone {
 		position: absolute;
-		background: linear-gradient(90deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.2) 100%);
+		background-image: linear-gradient(90deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.2) 100%)!important;
 		border: 3px dashed #000; /* Dashed outline */
 		box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow */
 		border-radius: 10px; /* Rounded corners */
