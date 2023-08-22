@@ -29,6 +29,9 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"ethers": "^5.7.2"
+		"@fontsource/montserrat": "^5.0.8",
+		"buffer": "^6.0.3",
+		"ethers": "^5.7.2",
+		"hardhat": "^2.14.0"
 	}
 }
