@@ -6,3 +6,5 @@ export const shouldAlternate = writable(false);
 export const gamePaused = writable(false);
 export const showDialog = writable(false);
 export const selectedEffect = writable(null);
+export const loadingDialog = writable(false);
+

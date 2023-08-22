@@ -1,4 +1,4 @@
-import { shouldChangePipe, season, gamePaused, showDialog, selectedEffect } from './stores';
+import { shouldChangePipe, season, gamePaused, showDialog, selectedEffect, loadingDialog } from './stores';
 // import functionCall from './function-call';
 import "@fontsource/montserrat"; // Defaults to weight 400
 import "@fontsource/montserrat/400.css"; // Specify weight
@@ -174,6 +174,10 @@ export class GameController {
         try {
             // Replace this with the actual method from your smart contract
             const result = await contractWithSigner.getEnumValue(apiType);
+            loadingDialog.set(false)
+            showDialog.set(false);
+            gamePaused.set(false);    
+            selectedEffect.set(null)
             console.log("API call result:", result);
             console.log("API call result:", hexToString(result));
             const ret = hexToString(result);
@@ -196,33 +200,39 @@ export class GameController {
         // this.frame.infoMessage = "Transaction Confirmed and Response returned to Client Contract.."
         // await this.delay(500);  // Wait for 1 second (1000 milliseconds)
 
+        let temp;
         switch (effect) {
             case 'Weather':
-              let temp = await this.callAPI(APIType.Weather);
+              temp = await this.callAPI(APIType.Weather);
               this.handleWeather(temp)
               break;
             case 'Poke':
-              this.changeBackground();
+              this.changeImage();
               this.callAPI(APIType.Poke);
               break;
             case 'Bored':
-              this.callAPI(APIType.Bored);
+              temp = await this.callAPI(APIType.Bored);
+              this.handleBored(temp)
               break;
             case 'Dog':
-              this.callAPI(APIType.Dog);
+              temp = await this.callAPI(APIType.Dog);
+              this.handleDog(temp)
               break;
             case 'Joke':
-              this.callAPI(APIType.Joke);
+              temp = await this.callAPI(APIType.Joke);
+              this.handleJoke(temp)
               break;
             case 'NASA':
-              this.callAPI(APIType.NASA);
+              temp = await this.callAPI(APIType.NASA);
+              this.handleNASA(temp)
               break;
             case 'Rick':
-              this.callAPI(APIType.Rick);
+              temp = await this.callAPI(APIType.Rick);
+              this.handleRick(temp)
               break;
             case 'Robohash':
-                let imageUrl = await this.callAPI(APIType.Robohash);
-                this.handleRobohash(imageUrl)
+                temp = await this.callAPI(APIType.Robohash);
+                this.handleRobohash(temp)
             // ... Handle other cases
                 break;
           }
@@ -282,6 +292,46 @@ export class GameController {
     private handleRobohash(url: string | undefined) {
         if (url !== undefined) {
             this.frame.bird.img = url;
+          } else {
+            // Handle the case where the API call failed or returned an undefined result
+          }
+    }
+
+    private handleRick(url: string | undefined) {
+        if (url !== undefined) {
+            this.frame.background = url;
+          } else {
+            // Handle the case where the API call failed or returned an undefined result
+          }
+    }
+
+    private handleNASA(url: string | undefined) {
+        if (url !== undefined) {
+            this.frame.background = url;
+          } else {
+            // Handle the case where the API call failed or returned an undefined result
+          }
+    }
+
+    private handleJoke(url: string | undefined) {
+        if (url !== undefined) {
+            this.frame.bird.thoughtText = url;
+          } else {
+            // Handle the case where the API call failed or returned an undefined result
+          }
+    }
+
+    private handleDog(url: string | undefined) {
+        if (url !== undefined) {
+            this.frame.bird.thoughtText = url;
+          } else {
+            // Handle the case where the API call failed or returned an undefined result
+          }
+    }
+
+    private handleBored(url: string | undefined) {
+        if (url !== undefined) {
+            this.frame.bird.thoughtText = "Getting Bored? huh! Here's something to do: " + url;
           } else {
             // Handle the case where the API call failed or returned an undefined result
           }
