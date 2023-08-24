@@ -296,10 +296,19 @@ export class GameController {
             // Handle the case where the API call failed or returned an undefined result
           }
     }
+    
+
+    private handlePokemon(id: string | undefined) {
+        if (id !== undefined) {
+            this.frame.bird.img = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;;
+          } else {
+            // Handle the case where the API call failed or returned an undefined result
+          }
+    }
 
     private handleRick(url: string | undefined) {
         if (url !== undefined) {
-            this.frame.background = url;
+            this.frame.bird.thoughtText = url;
           } else {
             // Handle the case where the API call failed or returned an undefined result
           }
