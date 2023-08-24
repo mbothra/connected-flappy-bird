@@ -168,7 +168,7 @@ export class GameController {
     
     private async callAPI(apiType: APIType) {
         const { signer, provider, chainId, account } = await getWeb3Account();
-        const contractAddress = "0x3E8590c2eD02861b9A4727b22e3A852ad72B1b23"; // replace with your contract address
+        const contractAddress = "0x6e579b283e573E0758a08D8b116e71f7bAeDa35A"; // replace with your contract address
         const contract = new ethers.Contract(contractAddress, ABI, provider);
         const contractWithSigner = contract.connect(signer);
         try {
