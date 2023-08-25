@@ -109,6 +109,11 @@
 <DialogBox />
 
 <style>
+
+* {
+    box-sizing: border-box;
+  }
+  
 .background {
 	position: absolute;
 	top: 0;
