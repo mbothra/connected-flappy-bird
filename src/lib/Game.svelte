@@ -6,10 +6,27 @@
 	import ApiCallZone from '$lib/ApiCallZone.svelte';
 	import { gamePaused } from './stores';
   import DialogBox from './DialogBox.svelte';
+  import { onMount } from 'svelte';
 
 	const game = new GameController();
 	let frame = game.newGame();
 	let web3Props: Web3Props; // Make sure to import the Web3Props type if needed
+	onMount(() => {
+		updateDimensions();
+
+		// Update dimensions whenever the window is resized
+		window.addEventListener('resize', updateDimensions);
+
+		return () => {
+			// Clean up event listener on component destroy
+			window.removeEventListener('resize', updateDimensions);
+		};
+	});
+
+	function updateDimensions() {
+		frame.width = window.innerWidth;
+		frame.height = window.innerHeight;
+	}
 
 	let backgroundHeight = frame.height - frame.ground.height;
 	function jump() {
