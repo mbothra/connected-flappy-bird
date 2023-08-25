@@ -567,10 +567,12 @@ export class GameController {
         return false;
     }
 
-    public start() {
+    public start(height, width) {
         this.newGame();
         this.frame.gameOver = false;
         this.frame.gameStarted = true;
+        this.frame.height = height;
+        this.frame.width = width;
         return this.frame;
     }
 

@@ -10,7 +10,7 @@
 
 	const game = new GameController();
 	let frame = game.newGame();
-	let web3Props: Web3Props; // Make sure to import the Web3Props type if needed
+
 	onMount(() => {
 		updateDimensions();
 
@@ -20,20 +20,23 @@
 		return () => {
 			// Clean up event listener on component destroy
 			window.removeEventListener('resize', updateDimensions);
-		};
+    };
 	});
 
 	function updateDimensions() {
 		frame.width = window.innerWidth;
-		frame.height = window.innerHeight;
+		frame.height = window.innerHeight-20;
 	}
 
+	let web3Props: Web3Props; // Make sure to import the Web3Props type if needed
 	function jump() {
 		game.jump();
 	}
 
 	function startGame() {
-		frame = game.start();
+		let height = window.innerHeight
+		let width = window.innerWidth
+		frame = game.start(height-20, width);
 	}
 
 	let intervalId: any = null; // Change the type to any
@@ -118,7 +121,7 @@
 	top: 0;
 	left: 0;
 	width: 100%;
-	height: 100%;
+	height: 98%;
 	z-index: -1;
 	background-size: contain; /* Adjust based on your image's aspect ratio */
 	animation: animateBackground 30s linear infinite;

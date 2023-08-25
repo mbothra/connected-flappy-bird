@@ -10,7 +10,8 @@
 		"sourceMap": true,
 		"strict": true,
 		"moduleResolution": "node",
-		"strictNullChecks": true 
+		"strictNullChecks": true,
+		"lib": ["dom", "es6", "dom.iterable", "scripthost"],
 	}
 	// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
 	//
