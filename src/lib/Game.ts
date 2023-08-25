@@ -207,8 +207,8 @@ export class GameController {
               this.handleWeather(temp)
               break;
             case 'Poke':
-              this.changeImage();
-              this.callAPI(APIType.Poke);
+              temp = await this.callAPI(APIType.Poke);
+              this.handlePokemon(temp);
               break;
             case 'Bored':
               temp = await this.callAPI(APIType.Bored);
@@ -307,11 +307,10 @@ export class GameController {
     }
 
     private handleRick(url: string | undefined) {
-        if (url !== undefined) {
+        if (url !== undefined ) {
             this.frame.bird.thoughtText = url;
-          } else {
-            // Handle the case where the API call failed or returned an undefined result
-          }
+        } else {
+        }        
     }
 
     private handleNASA(url: string | undefined) {
@@ -323,11 +322,11 @@ export class GameController {
     }
 
     private handleJoke(url: string | undefined) {
-        if (url !== undefined) {
+        if (url !== undefined && url !== "") {
             this.frame.bird.thoughtText = url;
-          } else {
-            // Handle the case where the API call failed or returned an undefined result
-          }
+        } else {
+            this.frame.bird.thoughtText = 'Orion’s Belt is a huge waist of space.';
+        }        
     }
 
     private handleDog(url: string | undefined) {
