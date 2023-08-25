@@ -28,7 +28,6 @@
 		frame.height = window.innerHeight;
 	}
 
-	let backgroundHeight = frame.height - frame.ground.height;
 	function jump() {
 		game.jump();
 	}
@@ -67,7 +66,7 @@
 <main style="width: {frame.width}px; height: {frame.height}px;" class="game">
 	<img src="/chainlink-logo.png" alt="Chainlink Logo" class="chainlink-logo" />
 	<WalletConnect {web3Props}/> 
-	<section class="background" style="height: {backgroundHeight}px; background-image: url({frame.background});"></section>
+	<section class="background" style="background-image: url({frame.background});"></section>
 	{#each [frame.firstPipe, frame.secondPipe] as pipe}
 		<Pipe {pipe} />
 		{#if pipe.apiCallZone}
