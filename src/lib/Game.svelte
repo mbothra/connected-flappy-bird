@@ -48,6 +48,7 @@
 
 
 <main style="width: {frame.width}px; height: {frame.height}px;" class="game">
+	<img src="/chainlink-logo.png" alt="Chainlink Logo" class="chainlink-logo" />
 	<WalletConnect {web3Props}/> 
 	<section class="background" style="height: {backgroundHeight}px; background-image: url({frame.background});"></section>
 	{#each [frame.firstPipe, frame.secondPipe] as pipe}
@@ -62,8 +63,8 @@
 		<span class="subtitle-text">Powered by <span class="chainlink">Chainlink functions</span></span>
 		</h1>
 	  </div>
-	<h1 on:click={startGame}>Start Game</h1>
-		{#if frame.gameOver}
+	<h1 on:click={startGame} class="start-game-btn">Start Game</h1>
+	  {#if frame.gameOver}
 			<h2>Game Over</h2>
 			<h3>Score: {frame.score}</h3>
 		{/if}
@@ -270,6 +271,27 @@ main {
 	border-radius: 10px;
 }
 
+.start-game-btn {
+        background-color: #375bd2;     /* Setting the background color to #375bd2 */
+        color: white;                  /* Setting the text color to white */
+        cursor: pointer;               /* Changing the cursor to indicate clickability */
+        transition: transform 0.3s;   /* Smooth transition for the scale transform */
+        padding: 10px 20px;            /* Add some padding for a better appearance */
+        border-radius: 5px;            /* Slight rounding of corners for aesthetics */
+		transform-origin: center; /* Explicitly set the scaling origin to the center */
+    }
 
+    .start-game-btn:hover {
+		transform: translate(-50%, -50%) scale(1.2);
+    }
+
+	.chainlink-logo {
+		position: absolute;
+		top: 25px;  /* Adjust as needed */
+		left: 25px; /* Adjust as needed */
+		width: 150px; /* Adjust based on the desired size */
+		height: auto; /* Maintains the image's aspect ratio */
+		z-index: 101; /* Ensures it's above other elements; adjust if necessary */
+	}
 
 </style>
