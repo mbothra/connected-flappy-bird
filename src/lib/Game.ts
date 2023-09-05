@@ -1,10 +1,11 @@
-import { shouldChangePipe, season, gamePaused, showDialog, selectedEffect, loadingDialog } from './stores';
+import { shouldChangePipe, season, gamePaused, showDialog, selectedEffect, loadingDialog, showBigDialog } from './stores';
 // import functionCall from './function-call';
 import "@fontsource/montserrat"; // Defaults to weight 400
 import "@fontsource/montserrat/400.css"; // Specify weight
 import "@fontsource/montserrat/400-italic.css"; // Specify weight and style
 import { ethers } from 'ethers';
 import ABI from './abi.json';  // Replace with your ABI path
+import ScoreABI from './score_abi.json';  // Replace with your ABI path
 
 enum APIType {
     Weather = 0,
@@ -77,13 +78,6 @@ export interface ApiCallZone {
     widthAdjustment: number,
     apiCallZoneHeight: number,
 }
-
-export const Effects = [
-    'BackgroundChange',
-    'CharacterChange',
-    'PipeChange',
-    // ... add other effects as needed
-  ];
   
 const infuraRpcUrl = 'https://avalanche-fuji.infura.io/v3/5b5742b5eec74c32b07f3e38a51a4ec4'; // Replace with your Infura RPC URL
 const provider = new ethers.providers.JsonRpcProvider(infuraRpcUrl);
@@ -111,6 +105,21 @@ const hexToString = (hex: string): string => {
     }
     return str;
     };
+
+export async function pushScore(playerName: string, score: number) {
+    const { signer, provider, chainId, account } = await getWeb3Account();
+    const contractAddress = "0x4201DBeBb6A00af00bDDb511aA628bDf8096b8B4"; // replace with your contract address
+    const contract = new ethers.Contract(contractAddress, ScoreABI, provider);
+    const contractWithSigner = contract.connect(signer);
+    try {
+        // Replace this with the actual method from your smart contract
+        const result = await contractWithSigner.storeAndMint(playerName, score, 0);
+        await result.wait();  
+
+    } catch (error) {
+        console.error("Error calling API:", error);
+    }
+}
           
 export class GameController {
     private frame: Frame;
@@ -120,20 +129,26 @@ export class GameController {
     constructor(
         public readonly height = 970,
         public readonly width = 1710,
-        public readonly pipeWidth = 100,
-        public readonly pipeGap = 350,
+        public pipeWidth = 100,
+        public pipeGap = 350,
         public readonly minTopForTopPipe = 70,
         public readonly maxTopForTopPipe = 350,
         public readonly generateNewPipePercent = 0.6,
-        public readonly speed = 7,
+        public speed = 7,
         public readonly groundHeight = 20,
         public readonly birdX = 40,
         public readonly birdSize = 100,
         public readonly gravity = 1.7,
-        public readonly jumpVelocity = 15,
-        public readonly slowVelocityBy = 0.6
+        public jumpVelocity = 15,
+        public slowVelocityBy = 0.6
     ) { }
     public newGame() {
+        this.pipeWidth = this.defaultValues.pipeWidth;
+        this.pipeGap = this.defaultValues.pipeGap;
+        this.speed = this.defaultValues.speed;
+        this.jumpVelocity = this.defaultValues.jumpVelocity;
+        this.slowVelocityBy = this.defaultValues.slowVelocityBy;
+    
         let firstPipe = this.createPipe(true);
         let secondPipe = this.createPipe(false);
 
@@ -166,6 +181,14 @@ export class GameController {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
     
+    private readonly defaultValues = {
+        pipeWidth: 100,
+        pipeGap: 350,
+        speed: 7,
+        jumpVelocity: 15,
+        slowVelocityBy: 0.6
+    };
+
     private async callAPI(apiType: APIType) {
         const { signer, provider, chainId, account } = await getWeb3Account();
         const contractAddress = "0x6e579b283e573E0758a08D8b116e71f7bAeDa35A"; // replace with your contract address
@@ -174,10 +197,6 @@ export class GameController {
         try {
             // Replace this with the actual method from your smart contract
             const result = await contractWithSigner.getEnumValue(apiType);
-            loadingDialog.set(false)
-            showDialog.set(false);
-            gamePaused.set(false);    
-            selectedEffect.set(null)
             console.log("API call result:", result);
             console.log("API call result:", hexToString(result));
             const ret = hexToString(result);
@@ -206,7 +225,7 @@ export class GameController {
               temp = await this.callAPI(APIType.Weather);
               this.handleWeather(temp)
               break;
-            case 'Poke':
+            case 'Pokemon':
               temp = await this.callAPI(APIType.Poke);
               this.handlePokemon(temp);
               break;
@@ -226,7 +245,7 @@ export class GameController {
               temp = await this.callAPI(APIType.NASA);
               this.handleNASA(temp)
               break;
-            case 'Rick':
+            case 'Rick & Morty':
               temp = await this.callAPI(APIType.Rick);
               this.handleRick(temp)
               break;
@@ -238,29 +257,12 @@ export class GameController {
           }
         await this.delay(1000);  // Wait for 1 second (1000 milliseconds)
         this.frame.infoMessage = ""
-
+        loadingDialog.set(false)
+        showDialog.set(false);
+        gamePaused.set(false);    
+        selectedEffect.set(null);
+        showBigDialog.set(false);
       }
-
-    private changeBackground() {
-        // You can define a list of backgrounds and select one randomly
-        // or base it on other game parameters
-        const backgrounds = [
-            'default.png',
-            'bg1.jpeg',
-            'bg2.jpeg',
-            'bg3.jpg',
-            'bg4.jpeg',
-            'bg5.png',
-            'bg6.gif',
-            'bg7.jpeg',
-            'bg8.jpeg',
-            'bg9.jpeg',
-            'bg10.png',
-        ];
-    
-        const randomIndex = Math.floor(Math.random() * backgrounds.length);
-        this.frame.background = backgrounds[randomIndex];
-    }
       
     private handleWeather(temperature: string | undefined) {
         // Define a list of backgrounds for each weather
@@ -279,13 +281,20 @@ export class GameController {
         } else { // Above 20°C
             currentWeather = 'summer';
         }
-
-        if(currentWeather == 'spring') {
-            this.frame.background = `${currentWeather}.png`;
-        } else {
-            this.frame.background = `${currentWeather}.jpeg`;
+        if (this.frame.background.includes(currentWeather)){
+            currentWeather = 'surprise'
         }
-        this.frame.bird.img = `${currentWeather}_up.png`;
+
+        if(currentWeather == 'autumn' ) {
+            this.frame.background = `${currentWeather}.webp`;
+        } else if(currentWeather == 'summer'){
+            this.frame.background = `${currentWeather}.jpeg`;
+        } else {
+            this.frame.background = `${currentWeather}.png`;
+        }
+        if(currentWeather != 'surprise') {
+            this.frame.bird.img = `${currentWeather}_up.png`;
+        }
         season.set(currentWeather)
     }
 
@@ -339,22 +348,15 @@ export class GameController {
 
     private handleBored(url: string | undefined) {
         if (url !== undefined) {
-            this.frame.bird.thoughtText = "Getting Bored? huh! Here's something to do: " + url;
+            this.frame.bird.thoughtText = url;
           } else {
             // Handle the case where the API call failed or returned an undefined result
           }
     }
 
-    private changePipe() {
-        // You can define a list of backgrounds and select one randomly
-        // or base it on other game parameters
-        shouldChangePipe.set(true);
-
-    }
-
     private createApiCallZone(effect: string, top: number, bottom: number, showPipe: boolean): ApiCallZone {
         let show = false;
-        if (Math.random() < 0.5) { // 50% chance
+        if (Math.random() < 1) { // 50% chance
             show = true;
         }
     
@@ -375,7 +377,8 @@ export class GameController {
             apiCallZoneHeight,
             effect,
         };
-    }    
+    }   
+    
 
     private async hasEnteredApiCallZone() {
         for (const pipe of [this.frame.firstPipe, this.frame.secondPipe]) {
@@ -429,9 +432,20 @@ export class GameController {
         );
     }
     
+    private getPipeGap(score: number): number {
+        const maxWidth = this.pipeGap;   // the original width of the pipe
+        const minWidth = maxWidth * 0.5;  // 50% of the original width, or choose any value you find challenging
+        const reductionFactor = 0.005;    // this will reduce width by 0.5% for every point increase in score
+    
+        const adjustedWidth = maxWidth - (score * reductionFactor * maxWidth);
+    
+        // Ensure the width doesn't get below the minimum width
+        return Math.max(minWidth, adjustedWidth);
+    }
+
     private createPipe(show: boolean): PipePair {
         const height = this.randomYForTopPipe();
-        const effect = Effects[Math.floor(Math.random() * Effects.length)];
+        this.pipeGap = this.frame ? this.getPipeGap(this.frame.score) : this.getPipeGap(0);
         let apiCallZone = this.createApiCallZone("Weather", height, this.pipeGap, show);
         return {
             topPipe: {
@@ -473,6 +487,18 @@ export class GameController {
         return pipe;
     }
 
+    private getUpdatedSpeed(score: number) {
+        const incrementJump = 0.01 * score; // adjust this value as per your needs
+        this.jumpVelocity = this.jumpVelocity - incrementJump;
+
+        const decrementSlowVelocity = 0.005 * score; // adjust this value as per your needs
+        this.slowVelocityBy = this.slowVelocityBy + decrementSlowVelocity;
+
+        const incrementSpeed = 0.1 * score; // adjust this value as per your needs
+        this.speed = this.speed + incrementSpeed;    
+
+    }
+    
     public nextFrame() {
         if (this.frame.gameOver || !this.frame.gameStarted) {
             return this.frame;
@@ -507,26 +533,37 @@ export class GameController {
         }
         this.frame.bird.top += Math.pow(this.gravity, 2) - this.velocity;
 
+
+        const pipePassedLeftBound = this.frame.firstPipe.left + this.pipeWidth-6.9;
+        const pipePassedRightBound = this.frame.firstPipe.left + this.pipeWidth;
+        const pipePassCheckValue = this.birdX - this.speed - 3;
+    
+        console.log("First Pipe Left Bound:", pipePassedLeftBound);
+        console.log("First Pipe Right Bound:", pipePassedRightBound);
+        console.log("Pipe Pass Check Value:", pipePassCheckValue);
+    
         // Add score
-        if (this.frame.firstPipe.left + this.pipeWidth == this.birdX - this.speed - 3) {
+        if (pipePassCheckValue >= pipePassedLeftBound && pipePassCheckValue <= pipePassedRightBound) {
             this.frame.score += 1;
+            this.getUpdatedSpeed(this.frame.score);
+            console.log("Scored on First Pipe! New Score:", this.frame.score);
         }
-
-        // Add Score
-        if (
-            this.frame.secondPipe.left + this.pipeWidth ==
-            this.birdX - this.speed - 3
-        ) {
+    
+        const secondPipePassedLeftBound = this.frame.secondPipe.left + this.pipeWidth-6.9;
+        const secondPipePassedRightBound = this.frame.secondPipe.left + this.pipeWidth;
+    
+        console.log("Second Pipe Left Bound:", secondPipePassedLeftBound);
+        console.log("Second Pipe Right Bound:", secondPipePassedRightBound);
+    
+        // Check for the second pipe
+        if (pipePassCheckValue >= secondPipePassedLeftBound && pipePassCheckValue <= secondPipePassedRightBound) {
             this.frame.score += 1;
+            this.getUpdatedSpeed(this.frame.score);
+            console.log("Scored on Second Pipe! New Score:", this.frame.score);
         }
-
+    
+    
         return this.frame;
-    }
-
-    public changeImage(){
-        let list = ["abra","pikachu","aerodactyl","chikorita","charmander","charmeleon","charizard","squirtle","blastoise","bulbasaur"]
-        this.frame.bird.img = list[this.frame.bird.imgN]+ ".png";
-        this.frame.bird.imgN+=1;
     }
 
     public jump() {
@@ -548,7 +585,7 @@ export class GameController {
         ) {
             return !(
                 this.frame.bird.top > this.frame.firstPipe.topPipe.height &&
-                this.frame.bird.top + this.birdSize <
+                this.frame.bird.top + (this.birdSize-10) <
                 this.frame.firstPipe.bottomPipe.top
             );
         }

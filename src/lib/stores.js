@@ -7,4 +7,5 @@ export const gamePaused = writable(false);
 export const showDialog = writable(false);
 export const selectedEffect = writable(null);
 export const loadingDialog = writable(false);
+export const showBigDialog = writable(false);
 

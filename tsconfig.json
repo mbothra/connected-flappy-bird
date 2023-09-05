@@ -12,6 +12,7 @@
 		"moduleResolution": "node",
 		"strictNullChecks": true,
 		"lib": ["dom", "es6", "dom.iterable", "scripthost"],
+		"allowImportingTsExtensions": true
 	}
 	// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
 	//

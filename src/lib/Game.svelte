@@ -7,6 +7,7 @@
 	import { gamePaused } from './stores';
   import DialogBox from './DialogBox.svelte';
   import { onMount } from 'svelte';
+  import GameOver from './GameOver.svelte';
 
 	const game = new GameController();
 	let frame = game.newGame();
@@ -78,16 +79,17 @@
 	{/each}
 	{#if frame.gameOver || !frame.gameStarted}
 	<div class="game-title">
-		<h1 class="title-text">Connected Flappy Bird
-		<span class="subtitle-text">Powered by <span class="chainlink">Chainlink functions</span></span>
+		<h1 class="title-text">Chain-Enabled Flappy Bird
+			<span class="subtitle-text">Powered by <span class="chainlink">Chainlink functions</span></span>
 		</h1>
-	  </div>
+	</div>
 	<h1 on:click={startGame} class="start-game-btn">Start Game</h1>
-	  {#if frame.gameOver}
-			<h2>Game Over</h2>
-			<h3>Score: {frame.score}</h3>
-		{/if}
+	{#if frame.gameOver}
+		<GameOver score={frame.score}/>
+		<h2>Game Over</h2>
+		<h3> Score : {frame.score}</h3>
 	{/if}
+{/if}
 	<Bird bird={frame.bird} />
 	<!-- <Web3Props/> -->
 	<section style="height: {frame.ground.height}px;" id="ground">
@@ -97,7 +99,7 @@
 			{/each}
 		</section>
 	</section>
-	<section id="score">{frame.score}</section>
+	<section id="score">Score: {frame.score}</section>
 		{#if frame.infoMessage !== ''}
 		<section id="info-bar">
 			{frame.infoMessage}
@@ -132,10 +134,11 @@
   text-align: center;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-family: 'Montserrat', cursive; /* Playful font */
+  font-family: 'Montserrat'; /* Playful font */
   padding: 20px; /* Increased padding */
   border-radius: 20px; /* Increased border-radius */
   top: 15%;
+  position: relative; /* Make it a positioning parent */
 }
 
 .title-text {
@@ -144,7 +147,7 @@
   /* text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); Text shadow */
   border-radius: 15px; /* Increased border-radius */
   padding: 40px; /* Increased padding */
-  width: 600px;
+  width: 700px;
   top: 40%;
   font-family: 'Montserrat'; /* Playful font */
 }
@@ -276,7 +279,7 @@ main {
 	font-size: 20px;
 	z-index: 10;
 	padding: 5px;
-	font-family: 'Chalkduster', cursive; /* Playful font */
+	font-family: 'Montserrat'; /* Playful font */
 	background: rgba(255, 255, 255, 0.8);
 	user-select: none;
 	border-radius: 10px; /* Rounded corners */
@@ -289,7 +292,7 @@ main {
 	font-size: 14px;
 	z-index: 100;
 	padding: 8px;
-	font-family: 'Chalkduster', cursive;
+	font-family: 'Montserrat';
 	background: rgba(255, 255, 255, 0.8);
 	user-select: none;
 	border-radius: 10px;
@@ -303,6 +306,9 @@ main {
         padding: 10px 20px;            /* Add some padding for a better appearance */
         border-radius: 5px;            /* Slight rounding of corners for aesthetics */
 		transform-origin: center; /* Explicitly set the scaling origin to the center */
+		position: relative; /* Make sure it's relative to game-title div */
+        z-index: 1; /* Ensure it's above the GameOver component */
+		width: 15%;
     }
 
     .start-game-btn:hover {
@@ -318,4 +324,10 @@ main {
 		z-index: 101; /* Ensures it's above other elements; adjust if necessary */
 	}
 
+    .game-over {
+        position: absolute; /* Absolutely position the GameOver dialog */
+        top: 110%; /* Position it just below the start-game-btn */
+        left: 50%; /* Center it horizontally */
+        transform: translateX(-50%); /* Shift half of its width to the left for true centering */
+    }
 </style>

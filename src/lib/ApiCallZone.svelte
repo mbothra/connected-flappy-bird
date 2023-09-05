@@ -23,20 +23,21 @@
 	}
 
 	.effect-tag {
-		font-family: 'Chalkduster', cursive; /* Playful font */
+		font-family: 'Montserrat'; /* Playful font */
 		font-size: 16px;
 		color: #5c6273; /* Text color */
 		text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Soft text shadow */
 	}
 
 	.effect-description {
-		font-family: 'Chalkduster', cursive; /* Playful font */
-		font-size: 16px;
-		color: #5c6273; /* Text color */
+		font-family: 'Montserrat'; /* Playful font */
+		font-size: 18px;
+		color: black; /* Text color */
 		text-align: right;
 		text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Soft text shadow */
         animation: bounce 1s infinite;
 		transition: all 0.5s ease;
+		font-weight: bolder;
 	}
 
 	@keyframes bounce {
