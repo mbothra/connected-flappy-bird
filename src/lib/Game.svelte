@@ -8,6 +8,7 @@
   import DialogBox from './DialogBox.svelte';
   import { onMount } from 'svelte';
   import GameOver from './GameOver.svelte';
+  import ContractDialogBox from './ContractDialogBox.svelte';
 
 	const game = new GameController();
 	let frame = game.newGame();
@@ -111,7 +112,7 @@
 <svelte:window on:keydown={jump} on:click={jump} />
 
 <DialogBox />
-
+<ContractDialogBox />
 <style>
 
 * {
@@ -307,7 +308,7 @@ main {
         border-radius: 5px;            /* Slight rounding of corners for aesthetics */
 		transform-origin: center; /* Explicitly set the scaling origin to the center */
 		position: relative; /* Make sure it's relative to game-title div */
-        z-index: 1; /* Ensure it's above the GameOver component */
+        z-index: 0; /* Ensure it's above the GameOver component */
 		width: 15%;
     }
 

@@ -1,4 +1,4 @@
-import { shouldChangePipe, season, gamePaused, showDialog, selectedEffect, loadingDialog, showBigDialog } from './stores';
+import { shouldChangePipe, season, gamePaused, showDialog, selectedEffect, loadingDialog, showBigDialog, showContractDialog, saveScoreButton } from './stores';
 // import functionCall from './function-call';
 import "@fontsource/montserrat"; // Defaults to weight 400
 import "@fontsource/montserrat/400.css"; // Specify weight
@@ -107,6 +107,7 @@ const hexToString = (hex: string): string => {
     };
 
 export async function pushScore(playerName: string, score: number) {
+    showContractDialog.set(true)
     const { signer, provider, chainId, account } = await getWeb3Account();
     const contractAddress = "0x4201DBeBb6A00af00bDDb511aA628bDf8096b8B4"; // replace with your contract address
     const contract = new ethers.Contract(contractAddress, ScoreABI, provider);
@@ -115,9 +116,12 @@ export async function pushScore(playerName: string, score: number) {
         // Replace this with the actual method from your smart contract
         const result = await contractWithSigner.storeAndMint(playerName, score, 0);
         await result.wait();  
-
+        showContractDialog.set(false)
+        saveScoreButton.set(false)
     } catch (error) {
         console.error("Error calling API:", error);
+        showContractDialog.set(false)
+        saveScoreButton.set(false)
     }
 }
           
@@ -356,7 +360,7 @@ export class GameController {
 
     private createApiCallZone(effect: string, top: number, bottom: number, showPipe: boolean): ApiCallZone {
         let show = false;
-        if (Math.random() < 0.5) { // 50% chance
+        if (Math.random() < 0) { // 50% chance
             show = true;
         }
     
@@ -606,6 +610,7 @@ export class GameController {
 
     public start(height, width) {
         this.newGame();
+        saveScoreButton.set(true)
         this.frame.gameOver = false;
         this.frame.gameStarted = true;
         this.frame.height = height;

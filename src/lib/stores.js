@@ -8,4 +8,5 @@ export const showDialog = writable(false);
 export const selectedEffect = writable(null);
 export const loadingDialog = writable(false);
 export const showBigDialog = writable(false);
-
+export const showContractDialog = writable(false);
+export const saveScoreButton = writable(true);

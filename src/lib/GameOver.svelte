@@ -2,6 +2,7 @@
     import { writable } from 'svelte/store';
 	export let score: number;
     import { pushScore } from './Game.ts'; // Adjust the path if needed
+    import { saveScoreButton } from './stores';
 
     // Input binding for the username
     let username = '';
@@ -27,7 +28,12 @@
     <div class="content">
         <label for="username">Enter your username:</label>
         <input id="username" bind:value={username} placeholder="Your Name" />
+        {#if $saveScoreButton}
         <button on:click={pushToBlockchain}>Save Score</button>
+        {/if}
+        {#if !$saveScoreButton}
+        <button disabled={true} on:click={pushToBlockchain}>Score Saved!</button>
+        {/if}
     </div>
 </main>
 

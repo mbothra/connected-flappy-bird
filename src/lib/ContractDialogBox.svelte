@@ -1,94 +1,13 @@
 <script>
-    import { showDialog, selectedEffect, loadingDialog, showBigDialog } from './stores';
+    import { showContractDialog } from './stores';
     import { fade } from 'svelte/transition';
-
-    let effects = ['Weather', 'Pokemon', 'Bored', 'Dog', 'Joke', 'NASA', 'Rick & Morty', 'Robohash'];
-    let gifUrl = '';
-    let displayText = '';
-
-    function selectEffect(event) {
-      const effect = event.target.value;
-      console.log("selectEffect called")
-      if (effect !== "Select an effect") {
-        selectedEffect.set(effect);
-        loadingDialog.set(true);
-        // Decide which GIF and text to display based on the selected effect
-        switch(effect) {
-          case 'Pokemon':
-            gifUrl = '/pokemon.gif'; // Replace with your GIF's path
-            displayText = 'Choosing your Pokemon using Chainlink Functions';
-            showBigDialog.set(true);
-            break;
-          case 'Weather':
-            gifUrl = '/map1.gif'; // Replace with your GIF's path
-            displayText = 'Getting temperature of a random location coordinates for you!';
-            showBigDialog.set(true);
-            break;     
-          case 'Bored':
-            gifUrl = '/bored.gif'; // Replace with your GIF's path
-            displayText = 'Calling Bored API through Chainlink Functions!';
-            showBigDialog.set(true);
-            break;       
-          case 'Dog':
-            gifUrl = '/dog.gif'; // Replace with your GIF's path
-            displayText = 'Calling Dog API through Chainlink Functions!';
-            showBigDialog.set(true);
-            break;    
-          case 'Joke':
-            gifUrl = '/joke.gif'; // Replace with your GIF's path
-            displayText = 'Calling Joke API through Chainlink Functions!';
-            showBigDialog.set(true);
-            break;  
-          case 'NASA':
-            gifUrl = '/nasa.gif'; // Replace with your GIF's path
-            displayText = 'Calling NASA space API through Chainlink Functions!';
-            showBigDialog.set(true);
-            break;  
-          case 'Rick & Morty':
-            gifUrl = '/rick.gif'; // Replace with your GIF's path
-            displayText = 'Calling Rick & Morty API through Chainlink Functions!';
-            showBigDialog.set(true);
-            break;  
-          case 'Robohash':
-            gifUrl = '/robohash.gif'; // Replace with your GIF's path
-            displayText = 'Calling Robohash API through Chainlink Functions!';
-            showBigDialog.set(true);
-            break; 
-          default:
-            gifUrl = '';
-            displayText = '';
-        }
-
-      } else {
-        loadingDialog.set(false);
-      }
-    }
+    let  displayText = 'Pushing your score onchain'
+    let  gifUrl = '/score.gif'
   </script>
   
-  {#if $showDialog}
+  {#if $showContractDialog}
     <div class="dialog-container" transition:fade>
-      <div class="dialog">
-        <div class="dialog-box">
-        <h2>Claim your reward for entering the Chainlink Functions activation zone</h2>
-        <p>Select an API to trigger through Chainlink Functions</p>
-        <select on:change={selectEffect}>
-          <option selected>Select an effect</option>
-          {#each effects as effect}
-            <option>{effect}</option>
-          {/each}
-        </select>
-      </div>
-        {#if $loadingDialog}
-        {#if !$showBigDialog}
 
-        <div class="loading-overlay">
-          <div class="loading-text">
-              Calling API through Chainlink Functions<span class="dot dot1">.</span><span class="dot dot2">.</span><span class="dot dot3">.</span>
-          </div>
-          </div>
-          {/if}
-        {/if}
-        {#if $showBigDialog}
         <div class="big-dialog-container" transition:fade>
             <div class="big-dialog">
                 <img src={gifUrl} alt="Loading GIF" class="big-loading-gif">
@@ -102,8 +21,6 @@
               </div>
             </div>
         </div>
-    {/if}
-    </div>
     </div>
   {/if}
   
@@ -163,7 +80,6 @@
 
   margin-top: -22px;
     margin-left: 2px;
-
 }
   .dot1 {
     animation-delay: 0.5s;
