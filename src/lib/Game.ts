@@ -6,7 +6,7 @@ import "@fontsource/montserrat/400-italic.css"; // Specify weight and style
 import { ethers } from 'ethers';
 import ABI from './abi.json';  // Replace with your ABI path
 import ScoreABI from './score_abi.json';  // Replace with your ABI path
-
+// test
 enum APIType {
     Weather = 0,
     Poke=1,
