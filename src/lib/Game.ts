@@ -210,11 +210,11 @@ export class GameController {
     private async handleEffect(effect: string) {
         // this.frame.infoMessage = "Triggering Chainlink Functions: Calling weather API"
         // await this.delay(1000);  // Wait for 1 second (1000 milliseconds)
-        this.frame.infoMessage = "Submitting Transaction to Functions Consumer Contract."
+        this.frame.infoMessage = "Submitting Transaction to Functions consumer contract."
         await this.delay(500);  // Wait for 1 second (1000 milliseconds)
-        this.frame.infoMessage = "Submitting Transaction to Functions Consumer Contract.."
+        this.frame.infoMessage = "Submitting Transaction to Functions consumer contract.."
         await this.delay(500);  // Wait for 1 second (1000 milliseconds)
-        this.frame.infoMessage = "Submitting Transaction to Functions Consumer Contract..."
+        this.frame.infoMessage = "Submitting Transaction to Functions consumer contract..."
         await this.delay(500);  // Wait for 1 second (1000 milliseconds)
         // this.frame.infoMessage = "Transaction Confirmed and Response returned to Client Contract.."
         // await this.delay(500);  // Wait for 1 second (1000 milliseconds)
@@ -356,7 +356,7 @@ export class GameController {
 
     private createApiCallZone(effect: string, top: number, bottom: number, showPipe: boolean): ApiCallZone {
         let show = false;
-        if (Math.random() < 1) { // 50% chance
+        if (Math.random() < 0.5) { // 50% chance
             show = true;
         }
     
