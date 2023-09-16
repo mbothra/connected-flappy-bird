@@ -32,15 +32,14 @@
 <style>
 	.btn-container {
 		position: absolute;
-		top: 8px;
-		right: 110px;
+		top: 10px;
+		right: 150px;
 		z-index: 10;
 	}
 
 	.btn {
-		padding: 10px 20px;
+		padding: 12px 20px;
 		border: none;
-		border-radius: 4px;
 		cursor: pointer;
 		font-size: 16px;
 	}
@@ -48,12 +47,10 @@
 	.pixar-btn {
 		background: linear-gradient(45deg, #375bd2, #375bd2);
 		color: #FFF;
-		box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-		text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
-		font-family: 'Montserrat'; /* Playful font */
+		font-family: 'Circular'; /* Playful font */
 	}
 
 	.pixar-btn:hover {
-		background: linear-gradient(45deg, #FF8360, #F5BDB0);
+		background: linear-gradient(45deg, #375bd2, #375bd2);
 	}
 </style>

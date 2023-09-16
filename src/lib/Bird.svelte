@@ -40,12 +40,12 @@
 
 	.thought-bubble {
 		position: absolute;
-		width: 140px;
-		height: 60px;
+		width: 220px;
+		height: 120px;
 		background-color: white;
 		padding: 15px;
-		top: -120px;
-		right: -140px;
+		top: -170px;
+		right: -180px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -141,8 +141,8 @@
 	}
 
 	.thought-bubble.image-bubble {
-    width: 250px;
-    height: 150px;
+    width: 320px;
+    height: 220px;
 	top: -200px;
 	right: -280px;
   }

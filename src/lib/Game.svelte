@@ -9,6 +9,7 @@
   import { onMount } from 'svelte';
   import GameOver from './GameOver.svelte';
   import ContractDialogBox from './ContractDialogBox.svelte';
+  import './fonts.css';
 
 	const game = new GameController();
 	let frame = game.newGame();
@@ -78,19 +79,17 @@
 			<ApiCallZone zone={pipe.apiCallZone} />
 		{/if}
 	{/each}
-	{#if frame.gameOver || !frame.gameStarted}
+	{#if !frame.gameStarted}
 	<div class="game-title">
-		<h1 class="title-text">Chain-Enabled Flappy Bird
-			<span class="subtitle-text">Powered by <span class="chainlink">Chainlink functions</span></span>
-		</h1>
+		<h1 class="title-text">Onchain Flappy Bird </h1>
+		<h1 class="subtitle-text">Powered by Chainlink functions</h1>
+		<h1 on:click={startGame} class="start-game-btn">Start Game</h1>
 	</div>
-	<h1 on:click={startGame} class="start-game-btn">Start Game</h1>
-	{#if frame.gameOver}
-		<GameOver score={frame.score}/>
-		<h2>Game Over</h2>
-		<h3> Score : {frame.score}</h3>
-	{/if}
 {/if}
+{#if frame.gameOver}
+<GameOver score={frame.score} startFunc={startGame}/>
+{/if}
+
 	<Bird bird={frame.bird} />
 	<!-- <Web3Props/> -->
 	<section style="height: {frame.ground.height}px;" id="ground">
@@ -135,36 +134,46 @@
   text-align: center;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-family: 'Montserrat'; /* Playful font */
-  padding: 20px; /* Increased padding */
-  border-radius: 20px; /* Increased border-radius */
-  top: 15%;
-  position: relative; /* Make it a positioning parent */
+  font-family: 'Montserrat';
+  top: 40%;
+  display: flex;        /* Add flexbox */
+  flex-direction: column; /* Stack items vertically */
+  align-items: center;   /* Center them horizontally */
+  background: rgba(255, 255, 255);
+  height: 300px; /* Provides consistent spacing between the elements */
+	width: 500px;
 }
 
+
 .title-text {
-  font-size: 2.6rem; /* Increased font-size */
-  background: rgba(255, 255, 255, 0.8);
-  /* text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); Text shadow */
-  border-radius: 15px; /* Increased border-radius */
-  padding: 40px; /* Increased padding */
-  width: 700px;
-  top: 40%;
-  font-family: 'Montserrat'; /* Playful font */
+    position: absolute;
+    text-align: center;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Circular';
+    box-shadow: 2px 4px 6px rgba(0, 0, 0, 0);
+    top: 30%;
+    background: None;
+    font-size: 2.3em;
+    white-space: nowrap; /* prevent wrapping */
 }
 
 .subtitle-text {
-  font-size: 1.5rem; /* Increased font-size */
-  background: rgba(255, 255, 255, 0);
-  /* text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); Text shadow */
-  border-radius: 15px; /* Increased border-radius */
-  padding: 10px; /* Increased padding */
-  margin-top: 10px; /* Increased space between title and subtitle */
-  width: 1000px;
-  top: 350%;
-  font-family: 'Montserrat'; /* Playful font */
-
+	position: absolute;
+	text-align: center;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-family: 'Circular-Light'; /* Playful font */
+	padding: 10px;
+	border-radius: 10px; /* Rounded corners */
+	box-shadow: 2px 4px 6px rgba(0, 0, 0, 0); /* Soft shadow */
+	top: 52%;
+	background: None;
+	font-size: 1.3em;
+	white-space: nowrap; /* prevent wrapping */
+	color:gray;
 }
+
 
 .chainlink {
   font-size: 2rem; /* Increased font-size */
@@ -277,13 +286,15 @@ main {
 	position: absolute;
 	right: 10px;
 	top: 10px;
-	font-size: 20px;
+	font-size: 16px;
 	z-index: 10;
 	padding: 5px;
-	font-family: 'Montserrat'; /* Playful font */
-	background: rgba(255, 255, 255, 0.8);
+	font-family: 'Circular'; /* Playful font */
+	background: rgba(255, 255, 255);
 	user-select: none;
-	border-radius: 10px; /* Rounded corners */
+	padding:10px;
+	width: 130px;
+	text-align: center;
 }
 
 #info-bar {
@@ -300,17 +311,19 @@ main {
 }
 
 .start-game-btn {
-        background-color: #375bd2;     /* Setting the background color to #375bd2 */
-        color: white;                  /* Setting the text color to white */
-        cursor: pointer;               /* Changing the cursor to indicate clickability */
-        transition: transform 0.3s;   /* Smooth transition for the scale transform */
-        padding: 10px 20px;            /* Add some padding for a better appearance */
-        border-radius: 5px;            /* Slight rounding of corners for aesthetics */
-		transform-origin: center; /* Explicitly set the scaling origin to the center */
-		position: relative; /* Make sure it's relative to game-title div */
-        z-index: 0; /* Ensure it's above the GameOver component */
-		width: 15%;
-    }
+    background-color: #375bd2;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.3s;
+    padding: 10px 20px;
+    z-index: 0;
+    width: 15%;
+	font-size: 1em;
+	border-radius: 0px;
+	width:250px;
+	top: 75%;
+}
+
 
     .start-game-btn:hover {
 		transform: translate(-50%, -50%) scale(1.2);

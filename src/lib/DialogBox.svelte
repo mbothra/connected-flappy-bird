@@ -69,10 +69,10 @@
     <div class="dialog-container" transition:fade>
       <div class="dialog">
         <div class="dialog-box">
-        <h2>Claim your reward for entering the Chainlink Functions activation zone</h2>
-        <p>Select an API to trigger through Chainlink Functions</p>
+        <h2>Activate your Special Power</h2>
+        <p>You can activate a special power using the Chainlink Functions API whenever you enter the Functions Activation Zone.</p>
         <select on:change={selectEffect}>
-          <option selected>Select an effect</option>
+          <option selected>Choose a special power</option>
           {#each effects as effect}
             <option>{effect}</option>
           {/each}
@@ -124,22 +124,24 @@
   }
 
   .dialog-box {
-    width: 400px;
-    padding: 20px;
+    width: 640px;
+    padding: 40px;
     background-color: white;
-    border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 0;
   }
     .dialog h2 {
       margin: 0 0 20px;
-      font-family: 'Montserrat'; /* Playful font */
+      font-family: 'Circular'; /* Playful font */
+      text-align: center;
+      font-size: 1.6em;
     }
     .dialog p {
       font-size: 16px;
       color: #333;
       margin-bottom: 20px;
-      font-family: 'Montserrat'; /* Playful font */
+      font-family: 'Circular-Light'; /* Playful font */
+      text-align: center;
     }
     .dialog select {
       width: 100%;

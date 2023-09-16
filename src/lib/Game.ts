@@ -6,6 +6,8 @@ import "@fontsource/montserrat/400-italic.css"; // Specify weight and style
 import { ethers } from 'ethers';
 import ABI from './abi.json';  // Replace with your ABI path
 import ScoreABI from './score_abi.json';  // Replace with your ABI path
+import '@chainlink/design-system/global-styles.css';
+
 // test
 enum APIType {
     Weather = 0,
@@ -360,7 +362,7 @@ export class GameController {
 
     private createApiCallZone(effect: string, top: number, bottom: number, showPipe: boolean): ApiCallZone {
         let show = false;
-        if (Math.random() < 0) { // 50% chance
+        if (Math.random() < 1) { // 50% chance
             show = true;
         }
     
