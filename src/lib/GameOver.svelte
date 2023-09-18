@@ -1,10 +1,12 @@
 <script lang="ts">
     import { writable } from 'svelte/store';
 	export let score: number;
+    export let functionScore: number;
     export let startFunc;
     import { pushScore } from './Game.ts'; // Adjust the path if needed
     import { saveScoreButton } from './stores';
 
+    let finalScore = 0;
     // Input binding for the username
     let username = '';
 
@@ -15,13 +17,14 @@
     }
 
     try {
-        await pushScore(username, score);
+        await pushScore(username, score, functionScore);
         console.log('Score successfully pushed to blockchain.');
     } catch (error) {
         console.error('Error pushing score to blockchain:', error);
     }
     }
 
+    finalScore = score + 2*functionScore;
 </script>
 
 <main class="game-over">
@@ -29,7 +32,7 @@
     <div class="score-box">
         Your Score:
         <div class="actual-score">
-            {score}
+            {finalScore}
         </div>
     </div>
 
@@ -96,23 +99,23 @@
     }
 
     .save-button {
-    background-color: #375bd2;
-    color: white;
-    cursor: pointer;
-    transition: transform 0.3s;
-    padding: 10px 20px;  /* Uniform padding for top/bottom and left/right */
-    z-index: 0;
-    width: 283px;
-    font-size: 1em;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 20px;
-    text-align: center;  /* Ensures text is centered horizontally */
-    display: block;      /* Convert the button to a block element */
-    line-height: normal; /* Resets line-height */
-    transition: transform 0.2s, background-color 0.2s;
-    position: relative;  /* Added for clarity */
-}
+        background-color: #375bd2;
+        color: white;
+        cursor: pointer;
+        transition: transform 0.3s;
+        padding: 10px 20px;  /* Uniform padding for top/bottom and left/right */
+        z-index: 0;
+        width: 283px;
+        font-size: 1em;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 20px;
+        text-align: center;  /* Ensures text is centered horizontally */
+        display: block;      /* Convert the button to a block element */
+        line-height: normal; /* Resets line-height */
+        transition: transform 0.2s, background-color 0.2s;
+        position: relative;  /* Added for clarity */
+    }
 
 
     .content {

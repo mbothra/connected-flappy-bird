@@ -17,6 +17,7 @@ contract HighScoreNFT is ERC721, ERC721URIStorage, VRFConsumerBaseV2 {
 	mapping(uint256 => string) public name;
 	mapping(uint256 => string) public imageURL;
 	mapping(uint256 => uint256) public score;
+    mapping(string => Player) public playerScores;
 
 	// Define a struct for the Player
     struct Player {
@@ -27,8 +28,40 @@ contract HighScoreNFT is ERC721, ERC721URIStorage, VRFConsumerBaseV2 {
         string nftImageURL;
     }
 
+    function _generateScoreKey(string memory playerName, uint256 _score) private pure returns (string memory) {
+        return string(abi.encodePacked(playerName, "_", Strings.toString(_score)));
+    }
 
-    mapping(string => Player) public playerScores;
+    function storeAndMint(string memory playerName, uint256 _pipeScore, uint256 _chainlinkScore) public {
+        uint256 _totalScore = _pipeScore + _chainlinkScore * 2; // Assuming chainlinkScore is multiplied by the multiplier
+        // Generate key for this player and score
+        string memory scoreKey = _generateScoreKey(playerName, _totalScore);
+
+        // Store the score for the player using the generated key
+        playerScores[scoreKey] = Player({
+            name: playerName,
+            pipeScore: _pipeScore,
+            chainlinkScore: _chainlinkScore,
+            totalScore: _totalScore,
+            nftImageURL: '' // Image URL will be set in mint
+        });
+
+        // Update topScorers list if the player qualifies
+        for (uint i = 0; i < 5; i++) {
+            if (_totalScore > topScorers[i].totalScore) {
+                for (uint j = 4; j > i; j--) {
+                    topScorers[j] = topScorers[j - 1];
+                }
+                topScorers[i] = playerScores[scoreKey];
+                break;
+            }
+        }
+
+        // Mint an NFT with the stored score
+        mint(playerName, _totalScore);
+    }
+
+
 
 	// Array to store the top 5 players
     Player[5] public topScorers;
@@ -74,37 +107,35 @@ contract HighScoreNFT is ERC721, ERC721URIStorage, VRFConsumerBaseV2 {
 		_tokenIdCounter.increment();
 	}
 
+    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, ERC721URIStorage) returns (bool) {
+        return ERC721.supportsInterface(interfaceId);
+    }
+
+
 	Counters.Counter private _tokenIdCounter;
 
+
 	// Function to mint a new NFT
-	function mint(string playerName, uint256 score) public {
-		// Require that the sender does not already have an NFT
-		require(addressToTokenId[msg.sender] == 0, 'Only Mint One');
+	function mint(string memory playerName, uint256 playerScore) public returns (uint256){
 		// Get the current token ID
 		uint256 id = _tokenIdCounter.current();
 		// Increment the token ID counter
 		_tokenIdCounter.increment();
-		if (addressToTokenId[msg.sender] == 0) {
-			_safeMint(msg.sender, id);
-		}
+		_safeMint(msg.sender, id);
 		// Mint the NFT to the sender
 		tokenOwner[id] = msg.sender;
 		// Set the NFT's name, image URL, and score
 		name[id] = playerName;
-		imageURL[
-			id
-		] = 'https://bafybeicdmsjlykhff3r65onlzz6t5eb7z7mfw2zq42m3d4qdfm5wg5xjle.ipfs.dweb.link/egg_nobg.png';
-		score[id] = 0;
-		updateScore(id, score);
+		updateScore(id, playerScore);
 		addressToTokenId[msg.sender] = id;
+		string memory _tokenURI = tokenURI(id);
+		_setTokenURI(id, _tokenURI);  // This sets the token URI for the minted token
 
 		return id;
 	}
 
 	// Function to update the score
 	function updateScore(uint256 id, uint256 _score) public {
-		require(msg.sender == tokenOwner[id]);
-
 		// Update the score and emit the event
 		score[id] = _score;
 		emit ScoreChanged(id, _score);
@@ -113,34 +144,36 @@ contract HighScoreNFT is ERC721, ERC721URIStorage, VRFConsumerBaseV2 {
 		if (score[id] > 15) {
 			imageURL[
 				id
-			] = 'https://bafybeicdmsjlykhff3r65onlzz6t5eb7z7mfw2zq42m3d4qdfm5wg5xjle.ipfs.dweb.link/eagle_nobg.png';
+			] = "https://bafybeicdmsjlykhff3r65onlzz6t5eb7z7mfw2zq42m3d4qdfm5wg5xjle.ipfs.dweb.link/eagle_nobg.png";
 		} else if (score[id] > 0) {
 			imageURL[
 				id
-			] = 'https://bafybeicdmsjlykhff3r65onlzz6t5eb7z7mfw2zq42m3d4qdfm5wg5xjle.ipfs.dweb.link/chick_nobg.png';
+			] = "https://bafybeicdmsjlykhff3r65onlzz6t5eb7z7mfw2zq42m3d4qdfm5wg5xjle.ipfs.dweb.link/chick_nobg.png";
 		} else {
 			imageURL[
 				id
-			] = 'https://bafybeicdmsjlykhff3r65onlzz6t5eb7z7mfw2zq42m3d4qdfm5wg5xjle.ipfs.dweb.link/egg_nobg.png';
+			] = "https://bafybeicdmsjlykhff3r65onlzz6t5eb7z7mfw2zq42m3d4qdfm5wg5xjle.ipfs.dweb.link/egg_nobg.png";
 		}
 	}
 
 	function tokenURI(
-		uint256 id
+		 uint256 id
 	) public view override(ERC721, ERC721URIStorage) returns (string memory) {
 		string memory _imageURL;
 		if (score[id] > 15) {
-			_imageURL = 'https://bafybeicdmsjlykhff3r65onlzz6t5eb7z7mfw2zq42m3d4qdfm5wg5xjle.ipfs.dweb.link/eagle_nobg.png';
+			_imageURL = "https://bafybeicdmsjlykhff3r65onlzz6t5eb7z7mfw2zq42m3d4qdfm5wg5xjle.ipfs.dweb.link/eagle_nobg.png";
 		} else if (score[id] > 0) {
-			_imageURL = 'https://bafybeicdmsjlykhff3r65onlzz6t5eb7z7mfw2zq42m3d4qdfm5wg5xjle.ipfs.dweb.link/chick_nobg.png';
+			_imageURL = "https://bafybeicdmsjlykhff3r65onlzz6t5eb7z7mfw2zq42m3d4qdfm5wg5xjle.ipfs.dweb.link/chick_nobg.png";
 		} else {
-			_imageURL = 'https://bafybeicdmsjlykhff3r65onlzz6t5eb7z7mfw2zq42m3d4qdfm5wg5xjle.ipfs.dweb.link/egg_nobg.png';
+			_imageURL = "https://bafybeicdmsjlykhff3r65onlzz6t5eb7z7mfw2zq42m3d4qdfm5wg5xjle.ipfs.dweb.link/egg_nobg.png";
 		}
 		string memory json = Base64.encode(
 			bytes(
 				string(
 					abi.encodePacked(
-						'{"name": "Your Flapper", ',
+						'{"name": "',
+						name[id],
+						'", ',
 						'"description": "Flapping to a new high score", "image": "',
 						_imageURL,
 						'", ',
@@ -183,26 +216,29 @@ contract HighScoreNFT is ERC721, ERC721URIStorage, VRFConsumerBaseV2 {
 		super._burn(tokenId);
 	}
 
-	function storeScoresAndImageURL(string memory playerName, uint256 _score, uint256 tokenId) public {
+	function storeScoresAndImageURL(string memory playerName, uint256 _pipeScore, uint256 _chainlinkScore, uint256 _totalScore, uint256 tokenId) public {
         require(msg.sender == tokenOwner[tokenId], "Only the NFT owner can submit scores.");
 
         // Store the score for the player
-        playerScores[msg.sender] = Player({
+        playerScores[playerName] = Player({
             name: playerName,
-            score: _score
+            pipeScore: _pipeScore,
+            chainlinkScore: _chainlinkScore,
+            totalScore: _totalScore,
+            nftImageURL: ''
         });
 
 		// mint(playerName);
 
         // Check if this player's score qualifies for the top 5
         for (uint i = 0; i < 5; i++) {
-            if (_score > topScorers[i].score) {
+            if (_totalScore > topScorers[i].totalScore) {
                 // Shift down the list to make room for the new entry
                 for (uint j = 4; j > i; j--) {
                     topScorers[j] = topScorers[j - 1];
                 }
                 // Store the new top scorer in the array
-                topScorers[i] = playerScores[msg.sender];
+                topScorers[i] = playerScores[playerName];
                 break;
             }
         }
@@ -213,9 +249,8 @@ contract HighScoreNFT is ERC721, ERC721URIStorage, VRFConsumerBaseV2 {
         return topScorers;
     }
 
-    // Function to get a player's score by address
-    function getPlayerScore(address _playerAddress) public view returns (Player memory) {
-        return playerScores[_playerAddress];
+    function getPlayerScoreByKey(string memory scoreKey) public view returns (Player memory) {
+        return playerScores[scoreKey];
     }
 
 

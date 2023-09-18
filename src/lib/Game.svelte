@@ -13,7 +13,6 @@
 
 	const game = new GameController();
 	let frame = game.newGame();
-
 	onMount(() => {
 		updateDimensions();
 
@@ -87,7 +86,7 @@
 	</div>
 {/if}
 {#if frame.gameOver}
-<GameOver score={frame.score} startFunc={startGame}/>
+<GameOver score={frame.score} startFunc={startGame} functionScore={frame.functionScore}/>
 {/if}
 
 	<Bird bird={frame.bird} />
@@ -99,7 +98,7 @@
 			{/each}
 		</section>
 	</section>
-	<section id="score">Score: {frame.score}</section>
+	<section id="score">Score: {frame.score + 2*frame.functionScore}</section>
 		{#if frame.infoMessage !== ''}
 		<section id="info-bar">
 			{frame.infoMessage}

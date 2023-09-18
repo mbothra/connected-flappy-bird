@@ -28,6 +28,7 @@ export interface Frame {
     width: number;
     height: number;
     score: number;
+    functionScore: number;
     ground: Ground;
     bird: Bird;
     background: string; // Add this line
@@ -108,7 +109,7 @@ const hexToString = (hex: string): string => {
     return str;
     };
 
-export async function pushScore(playerName: string, score: number) {
+export async function pushScore(playerName: string, score: number, functionScore: number) {
     showContractDialog.set(true)
     const { signer, provider, chainId, account } = await getWeb3Account();
     const contractAddress = "0x4201DBeBb6A00af00bDDb511aA628bDf8096b8B4"; // replace with your contract address
@@ -116,7 +117,7 @@ export async function pushScore(playerName: string, score: number) {
     const contractWithSigner = contract.connect(signer);
     try {
         // Replace this with the actual method from your smart contract
-        const result = await contractWithSigner.storeAndMint(playerName, score, 0);
+        const result = await contractWithSigner.storeAndMint(playerName, score, functionScore);
         await result.wait();  
         showContractDialog.set(false)
         saveScoreButton.set(false)
@@ -166,6 +167,7 @@ export class GameController {
             width: this.width,
             height: this.height,
             score: 0,
+            functionScore: 0,
             ground: {
                 height: this.groundHeight,
             },
@@ -203,8 +205,6 @@ export class GameController {
         try {
             // Replace this with the actual method from your smart contract
             const result = await contractWithSigner.getEnumValue(apiType);
-            console.log("API call result:", result);
-            console.log("API call result:", hexToString(result));
             const ret = hexToString(result);
             return ret
         } catch (error) {
@@ -360,9 +360,9 @@ export class GameController {
           }
     }
 
-    private createApiCallZone(effect: string, top: number, bottom: number, showPipe: boolean): ApiCallZone {
+    private createApiCallZone(effect: string, top: number, bottom: number, showPipe: boolean, score: number): ApiCallZone {
         let show = false;
-        if (Math.random() < 1) { // 50% chance
+        if ([3,6,9,12].includes(score)) { // 50% chance
             show = true;
         }
     
@@ -401,7 +401,7 @@ export class GameController {
                     this.frame.bird.top + this.birdSize >= pipe.apiCallZone.top &&
                     this.frame.bird.top <= pipe.apiCallZone.top + pipe.apiCallZone.height
                 ) {
-                    console.log("Entered API Call Zone with effect:", pipe.apiCallZone.effect);
+                    this.frame.functionScore += 1;
                     gamePaused.set(true);
                     showDialog.set(true);
                     // Declare a variable to hold the unsubscribe function
@@ -441,7 +441,7 @@ export class GameController {
     private getPipeGap(score: number): number {
         const maxWidth = this.pipeGap;   // the original width of the pipe
         const minWidth = maxWidth * 0.5;  // 50% of the original width, or choose any value you find challenging
-        const reductionFactor = 0.005;    // this will reduce width by 0.5% for every point increase in score
+        const reductionFactor = 0.002;    // this will reduce width by 0.5% for every point increase in score
     
         const adjustedWidth = maxWidth - (score * reductionFactor * maxWidth);
     
@@ -452,7 +452,7 @@ export class GameController {
     private createPipe(show: boolean): PipePair {
         const height = this.randomYForTopPipe();
         this.pipeGap = this.frame ? this.getPipeGap(this.frame.score) : this.getPipeGap(0);
-        let apiCallZone = this.createApiCallZone("Weather", height, this.pipeGap, show);
+        let apiCallZone = this.frame ? this.createApiCallZone("Weather", height, this.pipeGap, show, this.frame.score): this.createApiCallZone("Weather", height, this.pipeGap, show, 0);
         return {
             topPipe: {
                 top: 0,
@@ -494,7 +494,7 @@ export class GameController {
     }
 
     private getUpdatedSpeed(score: number) {
-        const incrementJump = 0.01 * score; // adjust this value as per your needs
+        const incrementJump = 0.001 * score; // adjust this value as per your needs
         this.jumpVelocity = this.jumpVelocity - incrementJump;
 
         const decrementSlowVelocity = 0.005 * score; // adjust this value as per your needs
@@ -543,29 +543,20 @@ export class GameController {
         const pipePassedLeftBound = this.frame.firstPipe.left + this.pipeWidth-6.9;
         const pipePassedRightBound = this.frame.firstPipe.left + this.pipeWidth;
         const pipePassCheckValue = this.birdX - this.speed - 3;
-    
-        console.log("First Pipe Left Bound:", pipePassedLeftBound);
-        console.log("First Pipe Right Bound:", pipePassedRightBound);
-        console.log("Pipe Pass Check Value:", pipePassCheckValue);
-    
+        
         // Add score
         if (pipePassCheckValue >= pipePassedLeftBound && pipePassCheckValue <= pipePassedRightBound) {
             this.frame.score += 1;
             this.getUpdatedSpeed(this.frame.score);
-            console.log("Scored on First Pipe! New Score:", this.frame.score);
         }
     
         const secondPipePassedLeftBound = this.frame.secondPipe.left + this.pipeWidth-6.9;
         const secondPipePassedRightBound = this.frame.secondPipe.left + this.pipeWidth;
-    
-        console.log("Second Pipe Left Bound:", secondPipePassedLeftBound);
-        console.log("Second Pipe Right Bound:", secondPipePassedRightBound);
-    
+        
         // Check for the second pipe
         if (pipePassCheckValue >= secondPipePassedLeftBound && pipePassCheckValue <= secondPipePassedRightBound) {
             this.frame.score += 1;
             this.getUpdatedSpeed(this.frame.score);
-            console.log("Scored on Second Pipe! New Score:", this.frame.score);
         }
     
     
