@@ -48,7 +48,9 @@
     </div>
     <hr> <!-- This is the horizontal line -->
     <h1>Start new game</h1>
-    <button class="new-button" on:click={startFunc}>Start new Game</button>
+    <div class="content">
+    <button class="new-button" on:click={startFunc}>Start new game</button>
+    </div>
 </main>
 
 <style>
@@ -115,6 +117,7 @@
         line-height: normal; /* Resets line-height */
         transition: transform 0.2s, background-color 0.2s;
         position: relative;  /* Added for clarity */
+        font-family: 'Circular';
     }
 
 
@@ -139,12 +142,13 @@
         font-size: 1em;
         margin-left: auto;
         margin-right: auto;
-        margin-top: 20px;
+        margin-top: -15px;
         text-align: center;  /* Ensures text is centered horizontally */
         display: block;      /* Convert the button to a block element */
         line-height: normal; /* Resets line-height */
         transition: transform 0.2s, background-color 0.2s;
         position: relative;  /* Added for clarity */
+        font-family: 'Circular';
     }
 
 </style>

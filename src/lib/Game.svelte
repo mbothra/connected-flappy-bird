@@ -81,7 +81,7 @@
 	{#if !frame.gameStarted}
 	<div class="game-title">
 		<h1 class="title-text">Onchain Flappy Bird </h1>
-		<h1 class="subtitle-text">Powered by Chainlink functions</h1>
+		<h1 class="subtitle-text">Powered by Chainlink Functions</h1>
 		<h1 on:click={startGame} class="start-game-btn">Start Game</h1>
 	</div>
 {/if}
