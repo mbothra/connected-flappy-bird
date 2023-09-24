@@ -112,7 +112,9 @@ const hexToString = (hex: string): string => {
 export async function pushScore(playerName: string, score: number, functionScore: number) {
     showContractDialog.set(true)
     const { signer, provider, chainId, account } = await getWeb3Account();
-    const contractAddress = "0x4201DBeBb6A00af00bDDb511aA628bDf8096b8B4"; // replace with your contract address
+    // const contractAddress = "0x4201DBeBb6A00af00bDDb511aA628bDf8096b8B4"; // replace with your contract address
+    const contractAddress = "0xb399Bd7E068170be488A1321b4EC7361293D95ad"; // replace with your contract address
+
     const contract = new ethers.Contract(contractAddress, ScoreABI, provider);
     const contractWithSigner = contract.connect(signer);
     try {

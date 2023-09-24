@@ -43,7 +43,10 @@
         <button class="save-button" on:click={pushToBlockchain}>Publish Score</button>
         {/if}
         {#if !$saveScoreButton}
-        <button disabled={true} on:click={pushToBlockchain}>Score Saved!</button>
+        <div class="qr-container">
+            <img src="/qr.png" alt="QR Code" class="qr-code"/>
+            <button disabled={true} on:click={pushToBlockchain}>Score Saved! Scan to find your NFT</button>
+        </div>
         {/if}
     </div>
     <hr> <!-- This is the horizontal line -->
@@ -54,6 +57,19 @@
 </main>
 
 <style>
+    .qr-container {
+    text-align: center;  /* To center the button and image horizontally */
+    margin-top: 20px;    /* Optional spacing on top */
+    }
+
+    .qr-code {
+    width: 100px;      /* Setting the width */
+    height: auto;      /* To maintain aspect ratio */
+    padding: 1px;      /* Adding padding */
+    display: block;    /* Making it block level for centering */
+    margin: 10px auto; /* Centering it horizontally and adding spacing */
+}
+
     .game-over {
         font-family: 'Circular';
         background: rgba(255, 255, 255);
