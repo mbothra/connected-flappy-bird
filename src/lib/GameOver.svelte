@@ -78,7 +78,7 @@
         width: 30%; /* Making the dialog a bit smaller */
         margin: auto; /* For center alignment */
         position: relative;
-        top: 10%;
+        top: 1%;
     }
     hr {
         width: 100%; /* or any other preferred width */

@@ -128,6 +128,7 @@
 
 * {
     box-sizing: border-box;
+	overflow: hidden;
   }
   
 .background {
@@ -139,6 +140,7 @@
 	z-index: -1;
 	background-size: contain; /* Adjust based on your image's aspect ratio */
 	animation: animateBackground 30s linear infinite;
+	overflow: hidden;
 }
 
 .game-title {
