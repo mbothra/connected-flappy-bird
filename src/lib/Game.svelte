@@ -27,7 +27,7 @@
 
 	function updateDimensions() {
 		frame.width = window.innerWidth;
-		frame.height = window.innerHeight-20;
+		frame.height = window.innerHeight;
 	}
 
 	let web3Props: Web3Props; // Make sure to import the Web3Props type if needed
@@ -38,7 +38,7 @@
 	function startGame() {
 		let height = window.innerHeight
 		let width = window.innerWidth
-		frame = game.start(height-20, width);
+		frame = game.start(height, width);
 	}
 
 	let intervalId: any = null; // Change the type to any
@@ -65,11 +65,24 @@
       startGameLoop();
     }
   }
+
+  function goFullScreen() {
+	if (!document.fullscreenElement) {
+		if (document.documentElement.requestFullscreen) {
+			document.documentElement.requestFullscreen();
+		} else if ((document.documentElement as any).webkitRequestFullScreen) { // Casting to any for older Webkit browsers
+			(document.documentElement as any).webkitRequestFullScreen();
+		}
+	}
+}
+
+
+
 </script>
 
 
 <main style="width: {frame.width}px; height: {frame.height}px;" class="game">
-	<img src="/chainlink-logo.png" alt="Chainlink Logo" class="chainlink-logo" />
+	<img src="/chainlink-logo.png" alt="Chainlink Logo" class="chainlink-logo" on:click={goFullScreen}/>
 	<WalletConnect {web3Props}/> 
 	<section class="background" style="background-image: url({frame.background});"></section>
 	{#each [frame.firstPipe, frame.secondPipe] as pipe}
