@@ -83,7 +83,6 @@
 
 <main style="width: {frame.width}px; height: {frame.height}px;" class="game">
 	<img src="/chainlink-logo.png" alt="Chainlink Logo" class="chainlink-logo" on:click={goFullScreen}/>
-	<WalletConnect {web3Props}/> 
 	<section class="background" style="background-image: url({frame.background});"></section>
 	{#each [frame.firstPipe, frame.secondPipe] as pipe}
 		<Pipe {pipe} />
