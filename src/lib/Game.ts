@@ -529,7 +529,7 @@ export class GameController {
 
         if (
             this.frame.bird.top >=
-            this.height - this.groundHeight - this.birdSize) {
+            this.height - this.groundHeight - this.birdSize - 80) {
             this.frame.bird.top = this.height - this.groundHeight - this.birdSize;
             this.frame.gameOver = true;
             return this.frame;
