@@ -364,7 +364,7 @@ export class GameController {
 
     private createApiCallZone(effect: string, top: number, bottom: number, showPipe: boolean, score: number): ApiCallZone {
         let show = false;
-        if ([3,6,9,12].includes(score)) { // 50% chance
+        if ([3,6,9,15,24,30].includes(score)) { // 50% chance
             show = true;
         }
     
@@ -499,7 +499,7 @@ export class GameController {
         const incrementJump = 0.0005 * score; // adjust this value as per your needs
         this.jumpVelocity = this.jumpVelocity - incrementJump;
 
-        const decrementSlowVelocity = 0.005 * score; // adjust this value as per your needs
+        const decrementSlowVelocity = 0.001 * score; // adjust this value as per your needs
         this.slowVelocityBy = this.slowVelocityBy + decrementSlowVelocity;
 
         const incrementSpeed = 0.1 * score; // adjust this value as per your needs
