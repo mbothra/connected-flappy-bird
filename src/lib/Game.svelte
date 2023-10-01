@@ -15,6 +15,7 @@
 	let frame = game.newGame();
 	onMount(() => {
 		updateDimensions();
+		document.body.style.overflow = 'hidden';
 
 		// Update dimensions whenever the window is resized
 		window.addEventListener('resize', updateDimensions);
@@ -22,6 +23,7 @@
 		return () => {
 			// Clean up event listener on component destroy
 			window.removeEventListener('resize', updateDimensions);
+			document.body.style.overflow = ''; // reset to default value on component destroy
     };
 	});
 
