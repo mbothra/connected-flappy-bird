@@ -443,7 +443,7 @@ export class GameController {
     private getPipeGap(score: number): number {
         const maxWidth = this.pipeGap;   // the original width of the pipe
         const minWidth = maxWidth * 0.5;  // 50% of the original width, or choose any value you find challenging
-        const reductionFactor = 0.002;    // this will reduce width by 0.5% for every point increase in score
+        const reductionFactor = 0.001;    // this will reduce width by 0.5% for every point increase in score
     
         const adjustedWidth = maxWidth - (score * reductionFactor * maxWidth);
     
@@ -496,7 +496,7 @@ export class GameController {
     }
 
     private getUpdatedSpeed(score: number) {
-        const incrementJump = 0.001 * score; // adjust this value as per your needs
+        const incrementJump = 0.0005 * score; // adjust this value as per your needs
         this.jumpVelocity = this.jumpVelocity - incrementJump;
 
         const decrementSlowVelocity = 0.005 * score; // adjust this value as per your needs
@@ -584,7 +584,7 @@ export class GameController {
         ) {
             return !(
                 this.frame.bird.top > this.frame.firstPipe.topPipe.height &&
-                this.frame.bird.top + (this.birdSize-10) <
+                this.frame.bird.top + (this.birdSize-13) <
                 this.frame.firstPipe.bottomPipe.top
             );
         }
