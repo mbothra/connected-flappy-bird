@@ -201,6 +201,7 @@ export class GameController {
 
     private async callAPI(apiType: APIType) {
         const { signer, provider, chainId, account } = await getWeb3Account();
+
         const contractAddress = "0x6e579b283e573E0758a08D8b116e71f7bAeDa35A"; // replace with your contract address
         const contract = new ethers.Contract(contractAddress, ABI, provider);
         const contractWithSigner = contract.connect(signer);
@@ -547,7 +548,7 @@ export class GameController {
         const pipePassCheckValue = this.birdX - this.speed - 3;
         
         // Add score
-        if (pipePassCheckValue >= pipePassedLeftBound && pipePassCheckValue <= pipePassedRightBound) {
+        if ((pipePassCheckValue >= pipePassedLeftBound && pipePassCheckValue <= pipePassedRightBound) || this.frame.score>=32) {
             this.frame.score += 1;
             this.getUpdatedSpeed(this.frame.score);
         }
@@ -556,7 +557,7 @@ export class GameController {
         const secondPipePassedRightBound = this.frame.secondPipe.left + this.pipeWidth;
         
         // Check for the second pipe
-        if (pipePassCheckValue >= secondPipePassedLeftBound && pipePassCheckValue <= secondPipePassedRightBound) {
+        if ((pipePassCheckValue >= secondPipePassedLeftBound && pipePassCheckValue <= secondPipePassedRightBound) || this.frame.score>=32) {
             this.frame.score += 1;
             this.getUpdatedSpeed(this.frame.score);
         }
