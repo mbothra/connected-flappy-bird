@@ -365,7 +365,7 @@ export class GameController {
     private createApiCallZone(effect: string, top: number, bottom: number, showPipe: boolean, score: number): ApiCallZone {
         let show = false;
         if ([3,6,9,15,24,30].includes(score)) { // 50% chance
-            show = true;
+            show = false;
         }
     
         const leftAdjustment = Math.floor(Math.random() * 101) + 350;
