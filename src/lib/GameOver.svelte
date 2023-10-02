@@ -38,7 +38,7 @@
 
     <h1>Publish your score onchain and mint an NFT!</h1>
     <div class="content">
-        <input id="username" bind:value={username} placeholder="Enter Your Name" />
+        <input id="username" bind:value={username} placeholder="Enter Your Twitter Handle" />
         {#if $saveScoreButton}
         <button class="save-button" on:click={pushToBlockchain}>Publish Score</button>
         {/if}
