@@ -548,7 +548,7 @@ export class GameController {
         const pipePassCheckValue = this.birdX - this.speed - 3;
         
         // Add score
-        if ((pipePassCheckValue >= pipePassedLeftBound && pipePassCheckValue <= pipePassedRightBound) || this.frame.score>=32) {
+        if ((pipePassCheckValue >= pipePassedLeftBound && pipePassCheckValue <= pipePassedRightBound)) {
             this.frame.score += 1;
             this.getUpdatedSpeed(this.frame.score);
         }
@@ -557,7 +557,7 @@ export class GameController {
         const secondPipePassedRightBound = this.frame.secondPipe.left + this.pipeWidth;
         
         // Check for the second pipe
-        if ((pipePassCheckValue >= secondPipePassedLeftBound && pipePassCheckValue <= secondPipePassedRightBound) || this.frame.score>=32) {
+        if ((pipePassCheckValue >= secondPipePassedLeftBound && pipePassCheckValue <= secondPipePassedRightBound)) {
             this.frame.score += 1;
             this.getUpdatedSpeed(this.frame.score);
         }
