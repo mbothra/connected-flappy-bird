@@ -82,7 +82,7 @@ export interface ApiCallZone {
     apiCallZoneHeight: number,
 }
   
-const infuraRpcUrl = 'https://avalanche-fuji.infura.io/v3/5b5742b5eec74c32b07f3e38a51a4ec4'; // Replace with your Infura RPC URL
+const infuraRpcUrl = 'HTTPS://api.avax-test.network/ext/bc/C/rpc'; // Replace with your Infura RPC URL
 const provider = new ethers.providers.JsonRpcProvider(infuraRpcUrl);
 const yourPrivateKey = 'f11ffe0c2a41fb52c9112793ce2fbad6ce48eaeca11b493421a26f7c234ec6fe'; // Replace with your private key
 const signer = new ethers.Wallet(yourPrivateKey, provider);
@@ -365,7 +365,7 @@ export class GameController {
     private createApiCallZone(effect: string, top: number, bottom: number, showPipe: boolean, score: number): ApiCallZone {
         let show = false;
         if ([3,6,9,15,24,30].includes(score)) { // 50% chance
-            show = false;
+            show = true;
         }
     
         const leftAdjustment = Math.floor(Math.random() * 101) + 350;
