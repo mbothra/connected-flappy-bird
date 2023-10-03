@@ -139,7 +139,7 @@ export class GameController {
         public readonly height = 970,
         public readonly width = 1710,
         public pipeWidth = 100,
-        public pipeGap = 400,
+        public pipeGap = 500,
         public readonly minTopForTopPipe = 70,
         public readonly maxTopForTopPipe = 350,
         public readonly generateNewPipePercent = 0.6,
@@ -193,7 +193,7 @@ export class GameController {
     
     private readonly defaultValues = {
         pipeWidth: 100,
-        pipeGap: 400,
+        pipeGap: 500,
         speed: 14,
         jumpVelocity: 15,
         slowVelocityBy: 0.6
