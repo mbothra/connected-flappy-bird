@@ -549,7 +549,7 @@ export class GameController {
         
         // Add score
         if ((pipePassCheckValue >= pipePassedLeftBound && pipePassCheckValue <= pipePassedRightBound)) {
-            this.frame.score += 1;
+            this.frame.score += 2;
             this.getUpdatedSpeed(this.frame.score);
         }
     
@@ -558,7 +558,7 @@ export class GameController {
         
         // Check for the second pipe
         if ((pipePassCheckValue >= secondPipePassedLeftBound && pipePassCheckValue <= secondPipePassedRightBound)) {
-            this.frame.score += 1;
+            this.frame.score += 2;
             this.getUpdatedSpeed(this.frame.score);
         }
     
