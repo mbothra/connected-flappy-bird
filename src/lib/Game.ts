@@ -143,7 +143,7 @@ export class GameController {
         public readonly minTopForTopPipe = 70,
         public readonly maxTopForTopPipe = 350,
         public readonly generateNewPipePercent = 0.6,
-        public speed = 7,
+        public speed = 11,
         public readonly groundHeight = 20,
         public readonly birdX = 40,
         public readonly birdSize = 100,
@@ -194,7 +194,7 @@ export class GameController {
     private readonly defaultValues = {
         pipeWidth: 100,
         pipeGap: 350,
-        speed: 7,
+        speed: 11,
         jumpVelocity: 15,
         slowVelocityBy: 0.6
     };
@@ -497,14 +497,14 @@ export class GameController {
     }
 
     private getUpdatedSpeed(score: number) {
-        const incrementJump = 0.0005 * score; // adjust this value as per your needs
-        this.jumpVelocity = this.jumpVelocity - incrementJump;
+        // const incrementJump = 0.0005 * score; // adjust this value as per your needs
+        // this.jumpVelocity = this.jumpVelocity - incrementJump;
 
-        const decrementSlowVelocity = 0.001 * score; // adjust this value as per your needs
-        this.slowVelocityBy = this.slowVelocityBy + decrementSlowVelocity;
+        // const decrementSlowVelocity = 0.001 * score; // adjust this value as per your needs
+        // this.slowVelocityBy = this.slowVelocityBy + decrementSlowVelocity;
 
-        const incrementSpeed = 0.1 * score; // adjust this value as per your needs
-        this.speed = this.speed + incrementSpeed;    
+        // const incrementSpeed = 0.1 * score; // adjust this value as per your needs
+        // this.speed = this.speed + incrementSpeed;    
 
     }
     
