@@ -143,7 +143,7 @@ export class GameController {
         public readonly minTopForTopPipe = 70,
         public readonly maxTopForTopPipe = 350,
         public readonly generateNewPipePercent = 0.6,
-        public speed = 11,
+        public speed = 14,
         public readonly groundHeight = 20,
         public readonly birdX = 40,
         public readonly birdSize = 100,
@@ -194,7 +194,7 @@ export class GameController {
     private readonly defaultValues = {
         pipeWidth: 100,
         pipeGap: 350,
-        speed: 11,
+        speed: 14,
         jumpVelocity: 15,
         slowVelocityBy: 0.6
     };
@@ -543,9 +543,9 @@ export class GameController {
         this.frame.bird.top += Math.pow(this.gravity, 2) - this.velocity;
 
 
-        const pipePassedLeftBound = this.frame.firstPipe.left + this.pipeWidth-6.9;
+        const pipePassedLeftBound = this.frame.firstPipe.left + this.pipeWidth-13.9;
         const pipePassedRightBound = this.frame.firstPipe.left + this.pipeWidth;
-        const pipePassCheckValue = this.birdX - this.speed - 3;
+        const pipePassCheckValue = this.birdX - this.speed;
         
         // Add score
         if ((pipePassCheckValue >= pipePassedLeftBound && pipePassCheckValue <= pipePassedRightBound)) {
