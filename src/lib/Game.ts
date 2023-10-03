@@ -143,7 +143,7 @@ export class GameController {
         public readonly minTopForTopPipe = 70,
         public readonly maxTopForTopPipe = 350,
         public readonly generateNewPipePercent = 0.6,
-        public speed = 12,
+        public speed = 11,
         public readonly groundHeight = 20,
         public readonly birdX = 40,
         public readonly birdSize = 100,
@@ -194,7 +194,7 @@ export class GameController {
     private readonly defaultValues = {
         pipeWidth: 100,
         pipeGap: 350,
-        speed: 12,
+        speed: 11,
         jumpVelocity: 15,
         slowVelocityBy: 0.6
     };
