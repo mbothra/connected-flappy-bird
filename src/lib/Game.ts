@@ -143,7 +143,7 @@ export class GameController {
         public readonly minTopForTopPipe = 70,
         public readonly maxTopForTopPipe = 350,
         public readonly generateNewPipePercent = 0.6,
-        public speed = 11,
+        public speed = 14,
         public readonly groundHeight = 20,
         public readonly birdX = 40,
         public readonly birdSize = 100,
@@ -194,7 +194,7 @@ export class GameController {
     private readonly defaultValues = {
         pipeWidth: 100,
         pipeGap: 350,
-        speed: 11,
+        speed: 14,
         jumpVelocity: 15,
         slowVelocityBy: 0.6
     };
@@ -365,7 +365,7 @@ export class GameController {
 
     private createApiCallZone(effect: string, top: number, bottom: number, showPipe: boolean, score: number): ApiCallZone {
         let show = false;
-        if ([3,6,9,15,24,30].includes(score)) { // 50% chance
+        if ([3,6,9].includes(score)) { // 50% chance
             show = true;
         }
     
