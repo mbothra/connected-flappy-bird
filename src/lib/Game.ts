@@ -139,7 +139,7 @@ export class GameController {
         public readonly height = 970,
         public readonly width = 1710,
         public pipeWidth = 100,
-        public pipeGap = 350,
+        public pipeGap = 400,
         public readonly minTopForTopPipe = 70,
         public readonly maxTopForTopPipe = 350,
         public readonly generateNewPipePercent = 0.6,
@@ -193,7 +193,7 @@ export class GameController {
     
     private readonly defaultValues = {
         pipeWidth: 100,
-        pipeGap: 350,
+        pipeGap: 400,
         speed: 14,
         jumpVelocity: 15,
         slowVelocityBy: 0.6
@@ -444,7 +444,7 @@ export class GameController {
     private getPipeGap(score: number): number {
         const maxWidth = this.pipeGap;   // the original width of the pipe
         const minWidth = maxWidth * 0.5;  // 50% of the original width, or choose any value you find challenging
-        const reductionFactor = 0.001;    // this will reduce width by 0.5% for every point increase in score
+        const reductionFactor = 0.0001;    // this will reduce width by 0.5% for every point increase in score
     
         const adjustedWidth = maxWidth - (score * reductionFactor * maxWidth);
     
